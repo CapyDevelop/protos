@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package PostService;
+
+option go_package = "/PostService";
+
+service PostService {
+  rpc GetPosts(GetPostsRequest) returns (GetPostsResponse) {}
+  rpc GetPost(GetPostRequest) returns (GetPostResponse) {}
+  rpc SetRating(SetRatingRequest) returns (Empty) {}
+  rpc GetComments(GetCommentsRequest) returns (GetCommentsResponse) {}
+  rpc SetComment(SetCommentRequest) returns (SetCommentResponse) {}
+  rpc SetCommentRating(SetCommentRatingRequest) returns (Empty) {}
+  rpc CreatePost(CreatePostRequest) returns (Empty) {}
+}
+
+message UserInfo {
+  string UUID = 1;
+  string Login = 2;
+}
+
+enum Entity {
+  TimeDesc = 0;
+  TimeAsc = 1;
+  MostRated = 2;
+  MostRatedAsc = 3;
+  Popularity = 4;
+  PopularityAsc = 5;
+}
+
+message GetPostsRequest {
+  UserInfo user = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+  Entity SortType = 4;
+  repeated string Tags = 5;
+}
+
+message Post {
+  string Title = 1;
+  string Body = 2;
+  string CreatedAt = 3;
+  float Rating = 4;
+  UserInfo Author = 5;
+  repeated string Tags = 6;
+  int32 PostId = 7;
+}
+
+message GetPostsResponse {
+  repeated Post Posts = 1;
+  int32 Total = 2;
+}
+
+message GetPostRequest {
+  UserInfo User = 1;
+  int32 PostId = 2;
+}
+
+message GetPostResponse {
+  Post Post = 1;
+  bool IsOwner = 2;
+}
+
+message SetRatingRequest {
+  UserInfo User = 1;
+  int32 PostId = 2;
+  int32 Rating = 3;
+
+}
+
+message Empty {}
+
+message Comment {
+  UserInfo Author = 1;
+  string Body = 2;
+  int32 LikesUp = 3;
+  int32 LikesDown = 4;
+  string CreatedAt = 5;
+  bool HaveChildren = 6;
+}
+
+
+message GetCommentsRequest {
+  UserInfo User = 1;
+  int32 PostId = 2;
+  int32 ParentId = 3;
+}
+
+message GetCommentsResponse {
+  repeated Comment Comment = 3;
+}
+
+message SetCommentRequest {
+  UserInfo User = 1;
+  string Body = 2;
+  int32 PostId = 3;
+  int32 ParentId = 4;
+}
+
+message SetCommentResponse {
+  string CommentId = 1;
+}
+
+message SetCommentRatingRequest {
+  UserInfo User = 1;
+  int32 CommentId = 2;
+  bool RatingUp = 3;
+  bool DeleteRating = 4;
+}
+
+message CreatePostRequest {
+  UserInfo User = 1;
+  Post Post = 2;
+}
