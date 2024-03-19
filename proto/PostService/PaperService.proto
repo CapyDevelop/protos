@@ -12,6 +12,7 @@ service PostService {
   rpc SetComment(SetCommentRequest) returns (SetCommentResponse) {}
   rpc SetCommentRating(SetCommentRatingRequest) returns (Empty) {}
   rpc CreatePost(CreatePostRequest) returns (Empty) {}
+
 }
 
 message UserInfo {
@@ -44,6 +45,11 @@ message Post {
   UserInfo Author = 5;
   repeated string Tags = 6;
   int32 PostId = 7;
+}
+
+message Tag {
+  int32 id = 1;
+  string title = 2;
 }
 
 message GetPostsResponse {
@@ -111,4 +117,5 @@ message SetCommentRatingRequest {
 message CreatePostRequest {
   UserInfo User = 1;
   Post Post = 2;
+  repeated Tag Tags = 3;
 }
